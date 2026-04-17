@@ -21,17 +21,21 @@ export class Utazas {
         else if (rating < 0 || rating > 5 || rating == null) {
             throw new Error("Nem megfelelő a értékelés!"); 
         }
-        else if (!(date_1.getTime()) || !(date_2.getTime())) {
-            throw new Error("Nem megfelelő a dátum!");
-        }
-        if (date_1.getTime() > date_2.getTime()) {
-            this.dateStart = date_2;
-            this.dateEnd = date_1;
+        if ( date_1 instanceof Date && date_2 instanceof Date)
+        {
+            if (date_1.getTime() > date_2.getTime()) {
+                this.dateStart = date_2;
+                this.dateEnd = date_1;
+            }
+            else  {
+                this.dateStart = date_1;
+                this.dateEnd = date_2;
+            }
         }
         else {
-            this.dateStart = date_1;
-            this.dateEnd = date_2;
+            throw new Error("Nem jó a dátum!");
         }
+
         this.city = city;
         this.country = country;
         this.price = price;
