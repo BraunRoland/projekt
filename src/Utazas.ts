@@ -7,18 +7,22 @@ export class Utazas {
     rating: number;
     bucket: boolean;
     
-    constructor(city: string, country: string, price: number, date_1: Date, date_2: Date, rating: number, bucket: boolean) {
-        if(city == null || city == null) {
+    constructor(location: string, price: number, date_1: Date, date_2: Date, rating: number, bucket: boolean) {
+        let hely = location.split(",")
+        let city  =  hely[0]?.trim();
+        let country  =  hely[1]?.trim();
+
+        if(city == null || country == null) {
             throw new Error("Nem lehet üres a város és az ország mező!"); 
         }
         else if(price < 0 || price == null) {
             throw new Error("Nem megfelelő az ár!"); 
         }
-        else if (!(date_1.getTime()) || !(date_2.getTime())) {
-            throw new Error("Nem megfelelő a dátum!");
-        }
         else if (rating < 0 || rating > 5 || rating == null) {
             throw new Error("Nem megfelelő a értékelés!"); 
+        }
+        else if (!(date_1.getTime()) || !(date_2.getTime())) {
+            throw new Error("Nem megfelelő a dátum!");
         }
         if (date_1.getTime() > date_2.getTime()) {
             this.dateStart = date_2;
