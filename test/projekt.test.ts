@@ -61,3 +61,24 @@ describe('Bucket', () => {
         expect(bucket.writeDate()).toBe('2026.5.14');
     });
 });
+
+describe('fetch', () => {
+    test('Utazas sikeres fetchelése', async () => {
+        const utazasok: Utazas[] = [];
+        const response = await fetch('https://retoolapi.dev/PxmLfg/utazas');
+        const data = await response.json();
+        data.forEach((u: any)=> {
+            utazasok.push(new Utazas(u.location,u.price,new Date(u.date_1),new Date(u.date_2),u.rating,u.bucket));
+        });
+        expect(utazasok.length).toBe(30);
+    });
+    test('Bucket sikeres fetchelése', async () => {
+        const bucketlist: Bucket[] = [];
+        const response = await fetch('https://retoolapi.dev/IwrmvF/bucket');
+        const data = await response.json();
+        data.forEach((b: any) => {
+            bucketlist.push(new Bucket(b.location,new Date(b.date)));
+        });
+        expect(bucketlist.length).toBe(8);
+    });
+});
