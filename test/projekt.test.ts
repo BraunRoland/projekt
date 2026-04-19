@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { Utazas } from "../src/Utazas.ts";
+import { Bucket } from "../src/Bucket.ts";
 
 
 describe('Utazas', () => {
@@ -35,8 +36,28 @@ describe('Utazas', () => {
     test('mindkettő dátum ugyanaz', () => {
         let utazas: Utazas = new Utazas("Budapest, Magyaro", 20456, new Date("2026.03.16"),new Date("2026.03.16"),5,false);
     });
-})
+    test('writeDateStart()', () => {
+        let utazas: Utazas = new Utazas("Budapest, Magyaro", 450000, new Date("2026.03.10"),new Date("2026.03.16"),5,false);
+        expect(utazas.writeDateStart()).toBe('2026.3.10');
+    });
+    test('writeDateEnd()', () => {
+        let utazas: Utazas = new Utazas("Budapest, Magyaro", 450000, new Date("2026.03.10"),new Date("2026.03.16"),5,false);
+        expect(utazas.writeDateEnd()).toBe('2026.3.16');
+    });
+});
 
 describe('Bucket', () => {
-
-})
+    test('sikeres felvétel', () => {
+        expect(()=> new Bucket('Budapest, Magyarország',new Date('2026.05.14'))).not.toThrow();
+    });
+    test('hibás helyszin', () => {
+        expect(() => new Bucket('Budapest',new Date('2026.05.14'))).toThrow();
+    });
+    test('Hibás helyszin vesszővel', () => {
+        expect(() => new Bucket('Budapest, ',new Date('2026.05.14'))).toThrow();
+    });
+    test('writeDate()', () => {
+        let bucket: Bucket = new Bucket('Budapest, Magyarország',new Date('2026.05.14'));
+        expect(bucket.writeDate()).toBe('2026.5.14');
+    });
+});

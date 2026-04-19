@@ -12,7 +12,7 @@ export class Utazas {
         let city  =  hely[0]?.trim();
         let country  =  hely[1]?.trim();
 
-        if(city == null || country == null) {
+        if(city == null || country == null || city == '' || country == '') {
             throw new Error("Nem lehet üres a város és az ország mező!"); 
         }
         else if(price < 1 || price == null) {
@@ -43,8 +43,12 @@ export class Utazas {
         this.bucket = bucket;
     }
 
-    writeDate(date: Date): string {
-        return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+    writeDateStart(): string {
+        return `${this.dateStart.getFullYear()}.${this.dateStart.getMonth() + 1}.${this.dateStart.getDate()}`;
+    }
+
+    writeDateEnd(): string {
+        return `${this.dateEnd.getFullYear()}.${this.dateEnd.getMonth() + 1}.${this.dateEnd.getDate()}`;
     }
 }
 

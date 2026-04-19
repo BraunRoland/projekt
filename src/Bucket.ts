@@ -2,13 +2,14 @@ export class Bucket {
     city: string;
     country: string;
     date: Date;
+    bucket: boolean;
 
     constructor(location: string, date: Date) {
         let hely = location.split(",")
         let city  =  hely[0]?.trim();
         let country  =  hely[1]?.trim()
         
-        if(city == null || country == null) {
+        if(city == null || country == null || city == '' || country == '') {
             throw new Error("Nem lehet üres a város és az ország mező!"); 
         }
 
@@ -20,10 +21,11 @@ export class Bucket {
         }
         this.city = city;
         this.country = country;
+        this.bucket = true;
     }
 
-    writeDate(date: Date): string {
-        return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+    writeDate(): string {
+        return `${this.date.getFullYear()}.${this.date.getMonth() + 1}.${this.date.getDate()}`;
     }
 }
 
