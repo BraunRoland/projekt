@@ -10,10 +10,10 @@
       <div class="container-fluid">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" href="#">Főoldal</a>
+            <a class="nav-link" href="index.html">Főoldal</a>
           </li>
         <li class="nav-item">
-            <a class="nav-link" href="travel.html">Utazásaim</a>
+            <a class="nav-link active" href="#">Utazásaim</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Bakancslistám</a>
@@ -25,10 +25,27 @@
         <button class="btn btn-primary">Bejelentkezés</button>
       </div>
     </nav>
-    <div id="app">
+    <div class="container" id="tablePage">
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Helyszín</th>
+                            <th>Utazás ideje</th>
+                            <th>Költség</th>
+                            <th>Értékelés</th>
+                            <th>gomb</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableAdat">
 
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/travel.ts"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   </body>
 </html>
