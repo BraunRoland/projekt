@@ -8,32 +8,31 @@ function tablazatKiiras(): void {
     utazasArr.forEach((u: Utazas,id) => {
         const tr = document.createElement('tr') as HTMLTableRowElement;
         const hely = document.createElement('td') as HTMLTableCellElement;
-        hely.textContent = u.city;
+        hely.textContent = u.city+ `, ${u.country}`;
         const kulonb = u.dateEnd.getTime() - u.dateStart.getTime();
         const ido = document.createElement('td') as HTMLTableCellElement;
-        ido.textContent = (Math.floor(kulonb/(1000*60*60*24))).toString() + ' nap';
+        ido.innerHTML = `${u.writeDateStart()} - <br>${u.writeDateEnd()}`
         const penz = document.createElement('td') as HTMLTableCellElement;
         penz.textContent = `${u.price.toLocaleString()} Ft`;
         const ertek = document.createElement('td') as HTMLTableCellElement;
         let ertekStrting: string = '';
         for (let i = 1; i < 6; i++) {
+            if (i <= u.rating) {
+                ertekStrting += '&#9733; '
+            }
+            else {
+                ertekStrting += '&#9734; '
+            }
             //&#9733; fekete
+            //&#9734; ures
         }
-        ertek.textContent = `${u.rating}/5`;
-        const btnTh = document.createElement('td') as HTMLTableCellElement;
-        const btn = document.createElement('button') as HTMLButtonElement;
-        btn.classList = 'btn btn-primary'
-        btn.textContent = 'Részletek';
-        btn.addEventListener('click', () => {
-            reszletek(id);
-        });
+        ertek.innerHTML = ertekStrting;
+        ertek.className = 'csillag';
         tablazat.appendChild(tr);
         tr.appendChild(hely);
         tr.appendChild(ido);
         tr.appendChild(penz);
         tr.appendChild(ertek);
-        tr.appendChild(btnTh);
-        btnTh.appendChild(btn);
     });
 }
 
@@ -53,6 +52,8 @@ async function utazasLekerdezes() {
     return adatok;
 }
 
+
+
 async function bucketLekerdezes() {
         const adatok: Bucket[] = [];
     
@@ -68,6 +69,8 @@ async function frissites() {
     utazasArr = await utazasLekerdezes();
     bucketArr = await bucketLekerdezes();
 }
+
+
 
 async function init() {
     await frissites();
