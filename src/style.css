@@ -54,3 +54,8 @@ th:hover {
 .modal-header {
     justify-content: center;
 }
+
+.alert {
+    margin-top: 20px;
+    display: none;
+}
