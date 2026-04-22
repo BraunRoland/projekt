@@ -1,4 +1,5 @@
 export class Utazas {
+    id: number;
     city: string;
     country: string;
     price: number;
@@ -7,7 +8,7 @@ export class Utazas {
     rating: number;
     bucket: boolean;
     
-    constructor(location: string, price: number, date_1: Date, date_2: Date, rating: number, bucket: boolean) {
+    constructor(id: number, location: string, price: number, date_1: Date, date_2: Date, rating: number, bucket: boolean) {
         let hely = location.split(",")
         let city  =  hely[0]?.trim();
         let country  =  hely[1]?.trim();
@@ -41,6 +42,7 @@ export class Utazas {
         this.price = price;
         this.rating = rating;
         this.bucket = bucket;
+        this.id = id;
     }
 
     writeDateStart(): string {

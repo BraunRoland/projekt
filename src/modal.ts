@@ -17,23 +17,19 @@ const path = window.location.pathname;
 
 btn.onclick = function() {
     modal.style.display = 'block';
-    console.log(path);
-    const pathParts = path.split("/");
-    const fileName = pathParts.pop();
-    const newName = fileName!.replace('.html','Admin.html');
-    let newPath: string = `/pages/${newName}`;
-    console.log(newPath);
 }
 close.onclick = function() {
     modal.style.display = 'none';
     user.value = "";
     pswd.value = "";
+    alert.style.display = 'none';
 }
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = 'none';
         user.value = "";
         pswd.value = "";
+        alert.style.display = 'none';
     }
 }
 
@@ -47,8 +43,15 @@ submit.addEventListener('submit', (event) => {
     console.log(`username: ${user.value.trim()}`);
     console.log(`password: ${pswd.value.trim()}`);
     try {
-        if (user.value.trim() == 'Admin' && pswd.value.trim() == 'Admin') {
-            console.log("asd");
+        if (user.value == 'Admin' && pswd.value == 'Admin') {
+            console.log(path);
+            const pathParts = path.split("/");
+            const fileName = pathParts.pop();
+            const newName = fileName!.replace('.html','Admin.html');
+            let newPath: string = `/pages/${newName}`;
+            alert.style.display = 'none';
+            console.log(newPath);
+            changeWindow(newPath);
         }
         else {
             throw new LoginError('Rossz felhasználónév és/vagy jelszó!')

@@ -26,27 +26,72 @@
       </div>
     </nav>
     <div class="container" id="tablePage">
-        <div class="row">
-            <h2>siker</h2>
-            <div class="col-sm-12">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Helyszín</th>
-                            <th>Utazás ideje</th>
-                            <th>Költség</th>
-                            <th>Értékelés</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableAdat">
+      <div class="row">
+        <div class="col-sm-12">
+          <table class="table">
+            <thead>
+              <tr class="tableHead">
+                  <th data-key="city">Helyszín </th>
+                  <th data-key="dateStart,dateEnd">Utazás ideje </th>
+                  <th data-key="price">Költség </th>
+                  <th data-key="rating">Értékelés </th>
+                  <th>asd</th>
+              </tr>
+            </thead>
+            <tbody class="tableHead" id="tableAdat">
 
-                    </tbody>
-                </table>
+            </tbody>
+          </table>
+          <div class="modal" id="modifyModal">
+            <div class="modal-content">
+              <div class="modal-header">
+                  <h4 class="header">Módósítás</h4>
+                  <span class="close">&times;</span>
+              </div>
+              <div class="modal-body">
+                <form action="submit" id="modiForm">
+                  <div class="mb-3 mt-3">
+                      <label for="city" class="form-label">Város:</label>
+                      <input type="text" class="form-control" id="city" placeholder="Add meg a várost" name="city">
+                  </div>
+                  <div class="mb-3">
+                      <label for="country" class="form-label">Ország:</label>
+                      <input type="text" class="form-control" id="country" placeholder="add meg az országot" name="country">
+                  </div>
+                  <div class="mb-3">
+                      <label for="date1" class="form-label">Utazás kezdete:</label>
+                      <input type="date" class="form-control" id="date1" placeholder="add meg a kezdést" name="date1">
+                  </div>
+                  <div class="mb-3">
+                      <label for="date2" class="form-label">Utazás vége:</label>
+                      <input type="date" class="form-control" id="date2" placeholder="add meg a végét" name="date2">
+                  </div>
+                  <div class="mb-3">
+                      <label for="price" class="form-label">Összeg:</label>
+                      <input type="number" class="form-control" id="price" placeholder="add meg az összeget" name="price">
+                  </div>
+                  <div class="mb-3">
+                      <label for="date2" class="form-label">Értékelés:</label>
+                      <select class="form-select" id="rating">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                  </div>
+                  <div id="ModiAlert" class="alert alert-danger">
+                    
+                  </div>
+                  <button type="submit" id="submit" class="btn btn-primary submit">Módosítás</button>
+              </form>
+              </div>
             </div>
         </div>
-    </div>
-    <script type="module" src="../src/travel.ts"></script>
-    <script type="module" src="../src/modal.ts"></script>
+      </div>
+    </div>  
+    <script type="module" src="../src/travelAdmin.ts"></script>
+    <script type="module" src="../src/modify.ts"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/src/style.css">
   </body>

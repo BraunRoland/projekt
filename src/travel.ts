@@ -118,7 +118,7 @@ async function utazasLekerdezes() {
     const response = await fetch("https://retoolapi.dev/PxmLfg/utazas");
     const data = await response.json();
     data.forEach((adat: any) => {
-        adatok.push(new Utazas(adat.location,adat.price,new Date(adat.date_1),new Date(adat.date_2),adat.rating,adat.bucket));
+        adatok.push(new Utazas(adat.id,adat.location,adat.price,new Date(adat.date_1),new Date(adat.date_2),adat.rating,adat.bucket));
     });
 
     return adatok;
