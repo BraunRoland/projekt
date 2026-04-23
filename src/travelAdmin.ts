@@ -71,6 +71,7 @@ function tablaModositas(id: number, arrId: number): void {
     date1Form.value = date1Value;
     date2Form.value = date2Value;
     form.dataset.id = arrId.toString();
+    document.getElementById('delete')!.dataset.id = arrId.toString();
     for (const select of ratingForm) {
         if (select.value == utazasArr[id]!.rating.toString()) {
             select.selected = true;
@@ -99,6 +100,21 @@ async function modositas(id: number) {
     );
     await frissites();
     tablazatKiiras(utazasArr);
+}
+
+async function torles(id: number) {
+    const response = await fetch(`https://retoolapi.dev/PxmLfg/utazas/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    await frissites();
+    tablazatKiiras(utazasArr);
+}
+
+async function create() {
+
 }
 
 close.onclick = function() {
@@ -224,4 +240,11 @@ form.addEventListener('submit', (e: Event) => {
     modositas(parseInt(target.dataset.id!));
 })
 
+document.getElementById("delete")?.addEventListener('click', (e: Event) => {
+    const target = e.currentTarget as HTMLElement;
+    torles(parseInt(target.dataset.id!));
+})
+document.getElementById('create')?.addEventListener('click', () => {
+    create();
+})
 document.addEventListener('DOMContentLoaded',init)

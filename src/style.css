@@ -49,6 +49,11 @@ th:hover {
     right: 15px;
 }
 
+.delete {
+    position: absolute;
+    right: 120px;
+}
+
 #loginForm, #modiForm {
     margin-bottom: 30px;
 }
@@ -66,4 +71,8 @@ th:hover {
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+#create {
+    margin-bottom: 30px;
 }
