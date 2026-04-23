@@ -10,6 +10,9 @@ const date1Form = document.getElementById('date1') as HTMLFormElement;
 const date2Form = document.getElementById('date2') as HTMLFormElement;
 const ratingForm = document.getElementById('rating') as HTMLSelectElement;
 const priceForm = document.getElementById('price') as HTMLFormElement;
+const deleteBtn = document.getElementById('delete') as HTMLButtonElement;
+const submitBtn = document.getElementById('submit') as HTMLButtonElement;
+const createBtn = document.getElementById("createForm") as HTMLButtonElement;
 
 
 
@@ -19,7 +22,7 @@ function tablazatKiiras(array: Utazas[]): void {
     array.forEach((u: Utazas,id) => {
         const tr = document.createElement('tr') as HTMLTableRowElement;
         const hely = document.createElement('td') as HTMLTableCellElement;
-        hely.textContent = u.city+ `, ${u.country}`;
+        hely.textContent = u.location();  
         hely.dataset.key = 'city';
         const kulonb = u.dateEnd.getTime() - u.dateStart.getTime();
         const ido = document.createElement('td') as HTMLTableCellElement;
@@ -63,6 +66,10 @@ function tablazatKiiras(array: Utazas[]): void {
 
 function tablaModositas(id: number, arrId: number): void {
     modal.style.display = 'block';
+    deleteBtn.style.display = 'block';
+    submitBtn.hidden = false;
+    createBtn.hidden = true;
+
     console.log(utazasArr[id]);
     cityForm.value = utazasArr[id]!.city;
     countryForm.value = utazasArr[id]!.country;
@@ -71,7 +78,7 @@ function tablaModositas(id: number, arrId: number): void {
     date1Form.value = date1Value;
     date2Form.value = date2Value;
     form.dataset.id = arrId.toString();
-    document.getElementById('delete')!.dataset.id = arrId.toString();
+    deleteBtn.dataset.id = arrId.toString();
     for (const select of ratingForm) {
         if (select.value == utazasArr[id]!.rating.toString()) {
             select.selected = true;
@@ -113,8 +120,55 @@ async function torles(id: number) {
     tablazatKiiras(utazasArr);
 }
 
-async function create() {
+function formTorles() {
+    priceForm.value = "";
+    cityForm.value = "",
+    countryForm.value = "";
+    date1Form.value = "";
+    date2Form.value = "";
+}
 
+async function create() {
+    formTorles();
+    deleteBtn.style.display = 'none';
+    modal.style.display = 'block';
+    submitBtn.hidden = true;
+    createBtn.hidden = false;
+}
+
+async function  post() {
+    console.log('belep');
+
+    try {
+        let ratingV: string = "";
+        for (const select of ratingForm) {
+            if (select.selected) {
+                ratingV = select.value;
+            }
+        }
+        const location = `${cityForm.value}, ${countryForm.value}`
+        const utazas = new Utazas(utazasArr.length+1,location,parseInt(priceForm.value),new Date(date1Form.value), new Date(date2Form.value),parseInt(ratingV),false)
+        const response = await fetch(`https://retoolapi.dev/PxmLfg/utazas`,
+            {
+                method: "POST",
+                headers:
+                {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({id: utazas.id, price: utazas.price, bucket: utazas.bucket, date_1: utazas.dateStart, date_2: utazas.dateEnd, rating: utazas.rating, location: utazas.location()})
+            }
+        );
+        await frissites();
+        tablazatKiiras(utazasArr);
+
+        formTorles();
+        modal.style.display = 'none';
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            console.log(err.message);
+        }
+    }
 }
 
 close.onclick = function() {
@@ -235,15 +289,20 @@ async function init() {
 form.addEventListener('submit', (e: Event) => {
     const target = e.target as HTMLElement;
     e.preventDefault();
+        modositas(parseInt(target.dataset.id!));
     // console.log(target);
     // console.log(target.dataset.id);
-    modositas(parseInt(target.dataset.id!));
-})
+});
 
-document.getElementById("delete")?.addEventListener('click', (e: Event) => {
+deleteBtn.addEventListener('click', (e: Event) => {
     const target = e.currentTarget as HTMLElement;
     torles(parseInt(target.dataset.id!));
 })
+
+createBtn.addEventListener('click', () => {
+    post();
+})
+
 document.getElementById('create')?.addEventListener('click', () => {
     create();
 })

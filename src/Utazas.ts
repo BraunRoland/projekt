@@ -52,6 +52,10 @@ export class Utazas {
     writeDateEnd(): string {
         return `${this.dateEnd.getFullYear()}.${this.dateEnd.getMonth() + 1}.${this.dateEnd.getDate()}`;
     }
+
+    location(): string {
+        return `${this.city}, ${this.country}`;
+    }
 }
 
 //https://retoolapi.dev/PxmLfg/utazas
