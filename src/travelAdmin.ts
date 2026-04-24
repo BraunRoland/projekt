@@ -13,6 +13,7 @@ const priceForm = document.getElementById('price') as HTMLFormElement;
 const deleteBtn = document.getElementById('delete') as HTMLButtonElement;
 const submitBtn = document.getElementById('submit') as HTMLButtonElement;
 const createBtn = document.getElementById("createForm") as HTMLButtonElement;
+const alert = document.getElementById('modiAlert') as HTMLDivElement;
 
 
 
@@ -69,6 +70,8 @@ function tablaModositas(id: number, arrId: number): void {
     deleteBtn.style.display = 'block';
     submitBtn.hidden = false;
     createBtn.hidden = true;
+    alert.hidden = true;
+    alert.innerHTML = '';
 
     console.log(utazasArr[id]);
     cityForm.value = utazasArr[id]!.city;
@@ -89,24 +92,31 @@ function tablaModositas(id: number, arrId: number): void {
 };
 
 async function modositas(id: number) {
-    let ratingV: string = "";
-    for (const select of ratingForm) {
-        if (select.selected) {
-            ratingV = select.value;
+    try {
+        const utazas = peldanyositas();
+        const response = await fetch(`https://retoolapi.dev/PxmLfg/utazas/${id}`,
+            {
+                method: "PATCH",
+                headers:
+                {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({location: utazas.location(), date_1: utazas.dateStart, date_2: utazas.dateEnd, rating: utazas.rating, price: utazas.price})
+            }
+        );
+        await frissites();
+        tablazatKiiras(utazasArr);
+        alert.hidden = true;
+        alert.innerHTML = '';
+        formTorles();
+        modal.style.display = 'none';
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            alert.hidden = false;
+            alert.innerHTML = `<strong>Hiba!</strong> ${err.message}`;
         }
     }
-    const response = await fetch(`https://retoolapi.dev/PxmLfg/utazas/${id}`,
-        {
-            method: "PATCH",
-            headers:
-            {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({location: `${cityForm.value}, ${countryForm.value}`, date_1: date1Form.value, date_2: date2Form.value, rating: ratingV, price:priceForm.value})
-        }
-    );
-    await frissites();
-    tablazatKiiras(utazasArr);
 }
 
 async function torles(id: number) {
@@ -118,6 +128,10 @@ async function torles(id: number) {
     });
     await frissites();
     tablazatKiiras(utazasArr);
+    alert.hidden = true;
+    alert.innerHTML = '';
+    formTorles();
+    modal.style.display = 'none';
 }
 
 function formTorles() {
@@ -140,14 +154,7 @@ async function  post() {
     console.log('belep');
 
     try {
-        let ratingV: string = "";
-        for (const select of ratingForm) {
-            if (select.selected) {
-                ratingV = select.value;
-            }
-        }
-        const location = `${cityForm.value}, ${countryForm.value}`
-        const utazas = new Utazas(utazasArr.length+1,location,parseInt(priceForm.value),new Date(date1Form.value), new Date(date2Form.value),parseInt(ratingV),false)
+        const utazas: Utazas = peldanyositas();
         const response = await fetch(`https://retoolapi.dev/PxmLfg/utazas`,
             {
                 method: "POST",
@@ -160,15 +167,33 @@ async function  post() {
         );
         await frissites();
         tablazatKiiras(utazasArr);
-
+        alert.hidden = true;
+        alert.innerHTML = '';
         formTorles();
         modal.style.display = 'none';
     }
     catch (err) {
         if (err instanceof Error) {
-            console.log(err.message);
+            alert.hidden = false;
+            alert.innerHTML = `<strong>Hiba!</strong> ${err.message}`;
         }
     }
+}
+
+function peldanyositas(): Utazas {
+    let ratingV: string = "";
+    for (const select of ratingForm) {
+        if (select.selected) {
+            ratingV = select.value;
+        }
+    }
+    const location = `${cityForm.value}, ${countryForm.value}`
+    if(date1Form.value == "" || date2Form.value == "") {
+        throw new Error("Nem jó a dátum!");
+    }
+    const utazas = new Utazas(utazasArr.length+1,location,parseInt(priceForm.value),new Date(date1Form.value), new Date(date2Form.value),parseInt(ratingV),false)
+    return utazas;
+        
 }
 
 close.onclick = function() {
@@ -276,7 +301,9 @@ function eventAdder(): void {
     const thArr = document.getElementsByTagName('th');
     console.log(thArr);
     for(const elem of thArr) {
-        elem.addEventListener('click',ascClick)
+        if(Object.keys(elem.dataset).length > 0) {
+            elem.addEventListener('click',ascClick)
+        }
     }
 }
 

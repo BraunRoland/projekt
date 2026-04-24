@@ -16,7 +16,7 @@ export class Utazas {
         if(city == null || country == null || city == '' || country == '') {
             throw new Error("Nem lehet üres a város és az ország mező!"); 
         }
-        else if(price < 1 || price == null) {
+        else if(price < 1 || price == null || isNaN(price)) {
             throw new Error("Nem megfelelő az ár!"); 
         }
         else if (rating < 0 || rating > 5 || rating == null) {
