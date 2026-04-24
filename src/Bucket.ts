@@ -4,7 +4,7 @@ export class Bucket {
     date: Date;
     bucket: boolean;
 
-    constructor(location: string, date: Date) {
+    constructor(location: string, date: Date, bucket: boolean) {
         let hely = location.split(",")
         let city  =  hely[0]?.trim();
         let country  =  hely[1]?.trim()
@@ -21,11 +21,15 @@ export class Bucket {
         }
         this.city = city;
         this.country = country;
-        this.bucket = true;
+        this.bucket = bucket;
     }
 
     writeDate(): string {
         return `${this.date.getFullYear()}.${this.date.getMonth() + 1}.${this.date.getDate()}`;
+    }
+
+    location(): string {
+        return `${this.city}, ${this.country}`;
     }
 }
 

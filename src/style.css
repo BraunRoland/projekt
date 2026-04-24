@@ -7,6 +7,15 @@ th:hover {
     cursor: pointer;
 }
 
+.bucketBtn {
+    font-size: 28px;
+    text-decoration: none;
+}
+
+.bucketBtn:hover {
+    cursor: pointer;
+}
+
 .modal {
     display: none;
     position: fixed;
