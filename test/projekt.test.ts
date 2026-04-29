@@ -48,16 +48,16 @@ describe('Utazas', () => {
 
 describe('Bucket', () => {
     test('sikeres felvétel', () => {
-        expect(()=> new Bucket('Budapest, Magyarország',new Date('2026.05.14'))).not.toThrow();
+        expect(()=> new Bucket(1,'Budapest, Magyarország',new Date('2026.05.14'),false)).not.toThrow();
     });
     test('hibás helyszin', () => {
-        expect(() => new Bucket('Budapest',new Date('2026.05.14'))).toThrow();
+        expect(() => new Bucket(1,'Budapest',new Date('2026.05.14'),false)).toThrow();
     });
     test('Hibás helyszin vesszővel', () => {
-        expect(() => new Bucket('Budapest, ',new Date('2026.05.14'))).toThrow();
+        expect(() => new Bucket(1,'Budapest, ',new Date('2026.05.14'),false)).toThrow();
     });
     test('writeDate()', () => {
-        let bucket: Bucket = new Bucket('Budapest, Magyarország',new Date('2026.05.14'));
+        let bucket: Bucket = new Bucket(1,'Budapest, Magyarország',new Date('2026.05.14'),false);
         expect(bucket.writeDate()).toBe('2026.5.14');
     });
 });
@@ -77,7 +77,7 @@ describe('fetch', () => {
         const response = await fetch('https://retoolapi.dev/IwrmvF/bucket');
         const data = await response.json();
         data.forEach((b: any) => {
-            bucketlist.push(new Bucket(b.location,new Date(b.date), b.bucket));
+            bucketlist.push(new Bucket(b.id, b.location,new Date(b.date), b.bucket));
         });
         expect(bucketlist.length).toBe(8);
     });

@@ -1,10 +1,11 @@
 export class Bucket {
+    id: number;
     city: string;
     country: string;
     date: Date;
     bucket: boolean;
 
-    constructor(location: string, date: Date, bucket: boolean) {
+    constructor(id: number, location: string, date: Date, bucket: boolean) {
         let hely = location.split(",")
         let city  =  hely[0]?.trim();
         let country  =  hely[1]?.trim()
@@ -22,6 +23,7 @@ export class Bucket {
         this.city = city;
         this.country = country;
         this.bucket = bucket;
+        this.id = id;
     }
 
     writeDate(): string {

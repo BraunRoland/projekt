@@ -2,7 +2,7 @@ import { Utazas } from "./Utazas.ts";
 let utazasArr: Utazas[] = [];
 let elozo: HTMLElement | null = null;
 const modal = document.getElementById('modifyModal') as HTMLDivElement;
-const close = document.getElementsByClassName('close')[0] as HTMLSpanElement;
+const close = document.getElementsByClassName('Utazas')[0] as HTMLSpanElement;
 const form = document.getElementById('modiForm') as HTMLDivElement;
 const cityForm = document.getElementById('city') as HTMLFormElement;
 const countryForm = document.getElementById('country') as HTMLFormElement;

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>projekt</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <div class="container-fluid">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="../indexAdmin.html">Főoldal</a>
+          </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/pages/travelAdmin.html">Utazásaim</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active">Bakancslistám</a>
+          </li>
+        </ul>
+      </div>
+      <div class="d-flex">
+        <a href="#">Sötétmód</a>
+        <button id="loginBtn" class="btn btn-danger">Kijelentkezés</button>
+      </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Hely</th>
+                            <th>Dátum</th>
+                            <th>Meg volt már?</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableKiiras">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="d-grid">
+                    <button class="btn btn-primary" id="create">Létrehozás</button>
+                </div>
+            </div>
+        </div>    
+    </div>
+    
+    <div class="modal" id="utazasModi">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="header" id="headerForm">Utazas</h4>
+            <span class="close" id="utazasClose">&times;</span>
+        </div>
+        <div class="modal-body">
+          <form action="submit" id="utazasForm">
+            
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/bakancsAdmin.ts"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+  </body>
+</html>

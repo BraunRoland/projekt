@@ -130,7 +130,7 @@ async function bucketLekerdezes() {
     const response = await fetch("https://retoolapi.dev/IwrmvF/bucket");
     const data = await response.json();
     data.forEach((adat: any) => {
-        adatok.push(new Bucket(adat.location, new Date(adat.date)));
+        adatok.push(new Bucket(adat.id, adat.location, new Date(adat.date),false));
     });
 
     return adatok;
