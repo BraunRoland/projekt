@@ -6,6 +6,8 @@ const modiU = document.getElementById('utazasModi') as HTMLDivElement;
 const header = document.getElementById('headerForm') as HTMLHeadElement;
 const form = document.getElementById('utazasForm') as HTMLFormElement;
 const letrehozas = document.getElementById('create') as HTMLButtonElement;
+const formBtn = document.getElementById('createForm') as HTMLButtonElement;
+let modiAlert;
 
 
 
@@ -93,7 +95,7 @@ function modal(e: Event) {
 
 closeU.onclick = function() {
     modiU.style.display = 'none';
-
+    
 }
 
 function bucketModal(bucket: boolean, id: (number | undefined))  {
@@ -101,13 +103,33 @@ function bucketModal(bucket: boolean, id: (number | undefined))  {
     form.innerHTML = '';
     modiU.style.display = 'block'
     let elem: (Bucket | Utazas | undefined) = undefined;
+
+    const alert = document.createElement("div") as HTMLDivElement;
+    alert.id = 'modiAlert';
+    alert.className = 'alert alert-danger'
+    alert.hidden = true;
+    
+    const button = document.createElement('button') as HTMLButtonElement;
+    button.id = 'createForm';
+    button.className = 'btn btn-primary submit';
+    button.innerText = 'Létrehozás';
+    button.type = 'submit';
+    button.dataset.class = 'utazas';
+    if (id != undefined) {
+        button.dataset.id = id!.toString();
+    }
+    else {
+        button.dataset.id = 'uj'
+    }
+
     if (bucket == true) {
         elem = bakancsArr.find(e => e.id === id) as Bucket;
+        button.dataset.class = 'bucket';
     }
     else if (bucket == false && id != undefined) {
         elem = uniqueU.find(e => e.id === id) as Utazas;
     }
-
+    
     const cityDiv = document.createElement('div') as HTMLDivElement;
     cityDiv.className = 'mb-3 mt-3';
     
@@ -177,7 +199,8 @@ function bucketModal(bucket: boolean, id: (number | undefined))  {
         else if (elem instanceof Utazas) {
             date1Inp.value = elem.dateStart.toISOString().split('T')[0]!;
         }
-    }
+    } 
+
 
     if(bucket == true) {
         date1label.innerText ="Kezdési dátum:"
@@ -244,64 +267,133 @@ function bucketModal(bucket: boolean, id: (number | undefined))  {
         form.appendChild(priceDiv);
         form.appendChild(ratingDiv);
     } 
+
+    modiAlert = document.getElementById('modiForm') as HTMLDivElement;
+
+    form.appendChild(alert);
+    form.appendChild(button);
 }
 
-/** 
+async function ujHozzadasa(type: string, id: number) {
+    try {
+        const utazas: (Utazas | Bucket) = peldanyositas(type);
+        if(utazas instanceof Utazas) {
+            const response = await fetch(`https://retoolapi.dev/PxmLfg/utazas`,
+                {
+                    method: "POST",
+                    headers:
+                    {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({id: utazas.id, price: utazas.price, bucket: utazas.bucket, date_1: utazas.dateStart, date_2: utazas.dateEnd, rating: utazas.rating, location: utazas.location()})
+                }
+            );
+            if(id != 0) {
+                bucketTorles(utazas.id);
+            }
+            utazasFormTorles();
+        }
+        else if(utazas instanceof Bucket) {
+            const response = await fetch('https://retoolapi.dev/IwrmvF/bucket', 
+                {
+                    method: "POST",
+                    headers: 
+                    {
+                        "Content-Type": "applications/json"
+                    },
+                    body: JSON.stringify({id: utazas.id, location: utazas.location(), bucket: utazas.bucket, date: utazas.date})
+                }
+            );
+            utazasTorles(utazas.id);
+            bucketFormTorles();
+        }
+        await frissites();
+        arrayLetrehozas();
+        kiiras();
+        modiAlert!.hidden = true;
+        modiAlert!.innerHTML = '';
+        modiU.style.display = 'none';
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            modiAlert!.hidden = false;
+            modiAlert!.innerHTML = `<strong>Hiba!</strong> ${err.message}`;
+        } 
+    }
+}
 
---Bucketform--
+async function utazasTorles(id: number) {
+    const response = await fetch(`https://retoolapi.dev/PxmLfg/utazas/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+}
 
-<div class="mb-3 mt-3">
-    <label for="city" class="form-label">Város:</label>
-    <input type="text" class="form-control" id="city" placeholder="Add meg a várost" name="city">
-</div>
-<div class="mb-3">
-    <label for="country" class="form-label">Ország:</label>
-    <input type="text" class="form-control" id="country" placeholder="add meg az országot" name="country">
-</div>
-<div class="mb-3">
-    <label for="date1" class="form-label">Utazás kezdete:</label>
-    <input type="date" class="form-control" id="date1" placeholder="add meg a kezdést" name="date1">
-</div>
+async function bucketTorles(id: number) {
+    const response = await fetch(`https://retoolapi.dev/IwrmvF/bucket/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+}
 
---UtazasForm--
+function utazasFormTorles() {
+    const cityForm = document.getElementById('city') as HTMLInputElement;
+    const countryForm = document.getElementById('country') as HTMLInputElement;
+    const date1Form = document.getElementById('date1') as HTMLInputElement;
 
-<div class="mb-3 mt-3">
-    <label for="city" class="form-label">Város:</label>
-    <input type="text" class="form-control" id="city" placeholder="Add meg a várost" name="city">
-</div>
-<div class="mb-3">
-    <label for="country" class="form-label">Ország:</label>
-    <input type="text" class="form-control" id="country" placeholder="add meg az országot" name="country">
-</div>
-<div class="mb-3">
-    <label for="date1" class="form-label">Utazás kezdete:</label>
-    <input type="date" class="form-control" id="date1" placeholder="add meg a kezdést" name="date1">
-</div>
-<div class="mb-3">
-    <label for="date2" class="form-label">Utazás vége:</label>
-    <input type="date" class="form-control" id="date2" placeholder="add meg a végét" name="date2">
-</div>
-<div class="mb-3">
-    <label for="price" class="form-label">Összeg:</label>
-    <input type="number" class="form-control" id="price" placeholder="add meg az összeget" name="price">
-</div>
-<div class="mb-3">
-    <label for="date2" class="form-label">Értékelés:</label>
-    <select class="form-select" id="rating">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-    </select>
-<div id="modiAlert" class="alert alert-danger" hidden>
+    cityForm.value = '';
+    countryForm.value = '';
+    date1Form.value = '';
+}
 
-</div>
-<button delete id="delete" type="button" class="btn btn-danger delete">Törlés</button>
-<button type="submit" id="submit" class="btn btn-primary submit">Módosítás</button>
-<button type="button" id="createForm" class="btn btn-primary submit" hidden> Létrehozás</button>
-                
-**/
+function bucketFormTorles() {
+    const cityForm = document.getElementById('city') as HTMLInputElement;
+    const countryForm = document.getElementById('country') as HTMLInputElement;
+    const date1Form = document.getElementById('date1') as HTMLInputElement;
+    const date2Form = document.getElementById('date2') as HTMLInputElement;
+    const priceForm = document.getElementById('price') as HTMLInputElement;
+  
+    cityForm.value = '';
+    countryForm.value = '';
+    date1Form.value = '';
+    date2Form.value = '';
+    priceForm.value = '';
+}
+
+
+function peldanyositas(type: string): (Utazas | Bucket) {
+    const cityForm = document.getElementById('city') as HTMLInputElement;
+    const countryForm = document.getElementById('country') as HTMLInputElement;
+    const date1Form = document.getElementById('date1') as HTMLInputElement;
+    const location = `${cityForm.value}, ${countryForm.value}`
+    if(type == 'utazas') {
+        const date2Form = document.getElementById('date2') as HTMLInputElement;
+        const priceForm = document.getElementById('price') as HTMLInputElement;
+        const ratingForm = document.getElementById('rating') as HTMLSelectElement;
+        let ratingV: string = "";
+        for (const select of ratingForm) {
+            if (select.selected) {
+                ratingV = select.value;
+            }
+        }
+        if(date1Form.value == "" || date2Form.value == "") {
+            throw new Error("Nem jó a dátum!");
+        }
+        const utazas = new Utazas(utazasArr.length+1,location,parseInt(priceForm.value),new Date(date1Form.value), new Date(date2Form.value),parseInt(ratingV),true)
+        return utazas; 
+    }
+    if(date1Form.value == '') {
+        throw new Error('Nem jó a dátum!')
+    }
+    const bucket = new Bucket(bakancsArr.length+1,location, new Date(date1Form.value), true)
+    return bucket;
+
+}
+
 
 
 function arrayLetrehozas(): void {
@@ -319,6 +411,21 @@ async function init(){
 
 letrehozas.addEventListener('click', () => {
     bucketModal(false, undefined);
+})
+
+form.addEventListener('submit', (e: Event) => {
+    const target = e.currentTarget as HTMLButtonElement;
+    if(target.dataset.id = 'uj') {
+        ujHozzadasa('utazas', 0);
+    }
+    else {
+        if(target.dataset.class = 'bucket') {
+            ujHozzadasa('utazas', parseInt(target.dataset.id));
+        }
+        else if (target.dataset.class = 'utazas') {
+            ujHozzadasa('bucket', parseInt(target.dataset.id));
+        }
+    }
 })
 
 document.addEventListener('DOMContentLoaded', init)

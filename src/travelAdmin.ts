@@ -2,7 +2,7 @@ import { Utazas } from "./Utazas.ts";
 let utazasArr: Utazas[] = [];
 let elozo: HTMLElement | null = null;
 const modal = document.getElementById('modifyModal') as HTMLDivElement;
-const close = document.getElementsByClassName('Utazas')[0] as HTMLSpanElement;
+const close = document.getElementsByClassName('close')[0] as HTMLSpanElement;
 const form = document.getElementById('modiForm') as HTMLDivElement;
 const cityForm = document.getElementById('city') as HTMLFormElement;
 const countryForm = document.getElementById('country') as HTMLFormElement;
@@ -192,8 +192,7 @@ function peldanyositas(): Utazas {
         throw new Error("Nem jó a dátum!");
     }
     const utazas = new Utazas(utazasArr.length+1,location,parseInt(priceForm.value),new Date(date1Form.value), new Date(date2Form.value),parseInt(ratingV),false)
-    return utazas;
-        
+    return utazas;  
 }
 
 close.onclick = function() {

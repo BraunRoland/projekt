@@ -69,7 +69,7 @@ th:hover {
     right: 120px;
 }
 
-#loginForm, #modiForm, #utazasForm, #bucketForm {
+#loginForm, #modiForm, #utazasForm{
     margin-bottom: 30px;
 }
 
